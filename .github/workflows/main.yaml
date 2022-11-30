@@ -129,7 +129,7 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npx electron-builder --linux --x64 --publish never
+        run: npx electron-builder --linux --arm64 --publish never
 
       - name: Upload dist
         uses: actions/upload-artifact@v3
