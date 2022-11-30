@@ -23,5 +23,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: windows-ia32
-          path: dist/redish-app-2
+          path: dist/redish-app-2 Setup 1.0.0.exe
           if-no-files-found: error
