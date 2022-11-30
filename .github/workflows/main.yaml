@@ -12,6 +12,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Get version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
 
@@ -25,7 +29,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: windows-ia32
-          path: dist/redish-app-2 Setup ${{ github.ref }}.exe
+          path: dist/redish-app-2 Setup ${{steps.get_version.outputs.VERSION }}.exe
           if-no-files-found: error
   
   windows-x64:
@@ -33,6 +37,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Get version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
@@ -47,7 +55,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: windows-x64
-          path: dist/redish-app-2 Setup ${{ github.ref }}.exe
+          path: dist/redish-app-2 Setup ${{steps.get_version.outputs.VERSION }}.exe
           if-no-files-found: error
   
   macos-arm64:
@@ -55,6 +63,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Get version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
@@ -69,7 +81,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: macos-arm64
-          path: dist/redish-app-2-${{ github.ref }}-arm64.dmg
+          path: dist/redish-app-2-${{steps.get_version.outputs.VERSION }}-arm64.dmg
           if-no-files-found: error
   
   macos-x64:
@@ -77,6 +89,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Get version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
@@ -91,7 +107,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: macos-x64
-          path: dist/redish-app-2-${{ github.ref }}.dmg
+          path: dist/redish-app-2-${{steps.get_version.outputs.VERSION }}.dmg
           if-no-files-found: error
   
   linux-x64:
@@ -99,6 +115,10 @@ jobs:
       steps:
         - name: Checkout code
           uses: actions/checkout@v3
+
+        - name: Get version
+          id: get_version
+          run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
 
         - name: Setup Node.js environment
           uses: actions/setup-node@v3
@@ -113,29 +133,6 @@ jobs:
           uses: actions/upload-artifact@v3
           with:
             name: linux-x64
-            path: dist/redish-app-2-${{ github.ref }}.AppImage
+            path: dist/redish-app-2-${{steps.get_version.outputs.VERSION }}.AppImage
             if-no-files-found: error
-
-  linux-arm64:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3
-
-      - name: Install packages
-        run: npm install
-
-      - name: Build
-        run: npx electron-builder --linux --arm64 --publish never
-
-      - name: Upload dist
-        uses: actions/upload-artifact@v3
-        with:
-          name: linux-arm64
-          path: dist/redish-app-2-${{ github.ref }}-arm64.AppImage
-          if-no-files-found: error
-
-
+            
