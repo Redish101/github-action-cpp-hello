@@ -1,7 +1,9 @@
 name: CI
 
 on:
-  - push
+  push:
+    tags:
+      - v*
 
 jobs:
   windows-ia32:
@@ -17,13 +19,13 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npx electron-builder --win --ia32  --publish never
+        run: npx electron-builder --win --ia32 --publish never
       
       - name: Upload dist
         uses: actions/upload-artifact@v3
         with:
           name: windows-ia32
-          path: dist/redish-app-2 Setup 1.0.0.exe
+          path: dist/redish-app-2 Setup ${{ github.ref }}.exe
           if-no-files-found: error
   
   windows-x64:
@@ -45,7 +47,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: windows-x64
-          path: dist/redish-app-2 Setup 1.0.0.exe
+          path: dist/redish-app-2 Setup ${{ github.ref }}.exe
           if-no-files-found: error
   
   macos-arm64:
@@ -67,7 +69,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: macos-arm64
-          path: dist/redish-app-2-1.0.0-arm64.dmg
+          path: dist/redish-app-2-${{ github.ref }}-arm64.dmg
           if-no-files-found: error
   
   macos-x64:
@@ -89,5 +91,51 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: macos-x64
-          path: dist/redish-app-2-1.0.0.dmg
+          path: dist/redish-app-2-${{ github.ref }}.dmg
           if-no-files-found: error
+  
+  linux-x64:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+
+        - name: Setup Node.js environment
+          uses: actions/setup-node@v3
+
+        - name: Install packages
+          run: npm install
+
+        - name: Build
+          run: npx electron-builder --linux --x64 --publish never
+
+        - name: Upload dist
+          uses: actions/upload-artifact@v3
+          with:
+            name: linux-x64
+            path: dist/redish-app-2-${{ github.ref }}.AppImage
+            if-no-files-found: error
+
+  linux-arm64:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+
+      - name: Install packages
+        run: npm install
+
+      - name: Build
+        run: npx electron-builder --linux --x64 --publish never
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-arm64
+          path: dist/redish-app-2-${{ github.ref }}-arm64.AppImage
+          if-no-files-found: error
+
+
