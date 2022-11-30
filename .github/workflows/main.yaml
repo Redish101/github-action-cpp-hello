@@ -4,18 +4,24 @@ on:
   - push
 
 jobs:
-  windows-i386:
+  windows-ia32:
     runs-on: windows-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+
+      - name: Install packages
+        run: npm install
+
       - name: Build
-        run: g++ ./main.cpp -arch i386 -o hello-windows-i386.exe
+        run: npx electron-builder --win --ia32
       
-      - name: Upload
+      - name: Upload dist
         uses: actions/upload-artifact@v3
         with:
-          name: windows-i386
-          path: hello-windows-i386.exe
+          name: windows-ia32
+          path: dist/redish-app-2
           if-no-files-found: error
